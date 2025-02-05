@@ -1,18 +1,28 @@
-import { GoogleOAuthProvider } from "@react-oauth/google";
+import { lazy, Suspense } from 'react';
 
-// components
-import Messenger from "./components/Messenger";
-import AccountProvider from "./components/context/AccountProvider";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+//components
+import UserProvider from './context/UserProvider';
+import AccountProvider from './context/AccountProvider';
+
+import Loader from './components/loader/Loader';
+
+const Messenger = lazy(() => import('./components/Messenger'));
 
 function App() {
-  const clientId =
-    "704864286646-m31arv6vq4qiii96drc7cei0c9goth5a.apps.googleusercontent.com";
+
+  const clientId = '246648691460-bsj1rub53iami1btvii0577h1on2je01.apps.googleusercontent.com';
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <AccountProvider>
-        <Messenger />
-      </AccountProvider>
+      <UserProvider>
+        <AccountProvider>
+          <Suspense fallback={<Loader />}>
+            <Messenger/>
+          </Suspense>
+        </AccountProvider>
+      </UserProvider>
     </GoogleOAuthProvider>
   );
 }

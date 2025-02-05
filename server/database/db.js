@@ -1,21 +1,13 @@
-import mongoose from "mongoose";
-import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
-dotenv.config();
-
-const USERNAME = process.env.DB_USERNAME;
-const PASSWORD = process.env.DB_PASSWORD;
-
-const Connection = async () => {
-  const URL = `mongodb+srv://${USERNAME}:${PASSWORD}@cluster0.pikc3.mongodb.net/`;
-  try {
-    await mongoose.connect(URL, {
-      useUnifiedTopology: true
-    });
-    console.log("Database connected successfully");
-  } catch (error) {
-    console.log("Error while connecting with database: ", error.message);
-  }
-}
+const Connection = async (username, password) => {
+    const URL = `mongodb+srv://${username}:${password}@cluster0.pikc3.mongodb.net/?retryWrites=true&w=majority`;
+    try {
+        await mongoose.connect(URL);
+        console.log('Database Connected Successfully');
+    } catch (error) {
+        console.log('Error: ', error.message);
+    }
+};
 
 export default Connection;
