@@ -57,8 +57,10 @@ const Messages = ({ person, conversation }) => {
     
     useEffect(() => {
         const getMessageDetails = async () => {
-            let data = await getMessages(conversation?._id);
-            setMessages(data);
+            if (conversation?._id) {
+                let data = await getMessages(conversation._id);
+                setMessages(data);
+            }
         }
         getMessageDetails();
     }, [conversation?._id, person._id, newMessageFlag]);
@@ -85,23 +87,25 @@ const Messages = ({ person, conversation }) => {
                 message = {
                     senderId: account.sub,
                     receiverId: receiverId,
-                    conversationId: conversation._id,
+                    conversationId: conversation?._id,
                     type: 'text',
                     text: value
                 };
             } else {
                 message = {
                     senderId: account.sub,
-                    conversationId: conversation._id,
+                    conversationId: conversation?._id,
                     receiverId: receiverId,
                     type: 'file',
                     text: image
                 };
             }
 
-            socket.current.emit('sendMessage', message);
+            if (conversation?._id) {
+                socket.current.emit('sendMessage', message);
+                await newMessages(message);
+            }
 
-            await newMessages(message);
 
             setValue('');
             setFile();
@@ -115,7 +119,7 @@ const Messages = ({ person, conversation }) => {
             <Component>
                 {
                     messages && messages.map(message => (
-                        <Container ref={scrollRef}>
+                        <Container ref={scrollRef} key={message._id}>
                             <Message message={message} />
                         </Container>
                     ))

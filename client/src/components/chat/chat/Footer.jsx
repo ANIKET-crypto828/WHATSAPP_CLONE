@@ -39,19 +39,23 @@ const ClipIcon = styled(AttachFile)`
 const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
 
   
-   useEffect(() => {
-     const getImage = async () => {
-      if (file) {
-          const data = new FormData();
-          data.append("name", file.name);
-          data.append("file", file);
+useEffect(() => {
+    const getImage = async () => {
+        if (file) {
+            const data = new FormData();
+            data.append("name", file.name);
+            data.append("file", file);
 
-          const response = await uploadFile(data);
-          setImage(response.data);
-      }
-   }
+            const response = await uploadFile(data);
+            if (response && response.status === 200) {
+                setImage(response.data);
+            } else {
+                console.log('Error while uploading file');
+            }
+        }
+    }
     getImage();
-  }, [file])
+}, [file])
 
   const onFileChange = (e) => {
     setFile(e.target.files[0]);
