@@ -94,13 +94,14 @@ useEffect(() => {
 }, [file])
 
   const onFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setValue(e.target.files[0].name);
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setValue(selectedFile.name);
+    }
   }
 
-
   return (
-
     <Container>
      <EmojiEmotions/>
      <label htmlFor="fileInput">
@@ -112,8 +113,6 @@ useEffect(() => {
      style={{ display: "none" }}
      onChange={(e) => onFileChange(e)}
      />
-
-
      <Search>
       <InputField 
       placeholder="Type a message"
