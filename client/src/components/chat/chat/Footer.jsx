@@ -1,7 +1,6 @@
 import { Box, InputBase, styled } from "@mui/material";
 import { EmojiEmotions, AttachFile, Mic } from '@mui/icons-material';
 import { useEffect } from "react";
-
 import { uploadFile } from "../../../service/api";
 
 const Container = styled(Box)`
@@ -36,8 +35,45 @@ const ClipIcon = styled(AttachFile)`
   transform: rotate(40deg);
 `;
 
-const Footer = ({ sendText, setValue, value, file, setFile, setImage }) => {
+const Footer = ({ sendText, setValue, value, file, setFile, setImage, account, conversation, receiverId, socket, newMessageFlag, setNewMessageFlag, newMessages, image }) => {
 
+useEffect(() => {
+  const sendText = async (e) => {
+    let code = e.keyCode || e.which;
+    if (!value) return;
+
+    if (code === 13) {
+        let message = {};
+        if (!file) {
+            message = {
+                senderId: account.sub,
+                receiverId: receiverId,
+                conversationId: conversation?._id,
+                type: 'text',
+                text: value
+            };
+        } else {
+            message = {
+                senderId: account.sub,
+                conversationId: conversation?._id,
+                receiverId: receiverId,
+                type: 'file',
+                text: image
+            };
+        }
+
+        if (conversation?._id) {
+            socket.current.emit('sendMessage', message);
+            await newMessages(message);
+        }
+
+        setValue('');
+        setFile();
+        setImage('');
+        setNewMessageFlag(prev => !prev);
+    }
+}
+}, [value, file, account, receiverId, conversation, socket, newMessages, image, setValue, setFile, setImage, setNewMessageFlag]);
   
 useEffect(() => {
     const getImage = async () => {

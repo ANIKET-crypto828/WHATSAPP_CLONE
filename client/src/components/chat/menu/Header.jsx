@@ -24,7 +24,7 @@ const Wrapper = styled(Box) `
         padding: 8px;
         color: #000;
     };
-    & :first-child {
+    & :first-of-type { // Changed from :first-child to :first-of-type
         font-size: 22px;
         margin-right: 8px;
         margin-top: 3px;

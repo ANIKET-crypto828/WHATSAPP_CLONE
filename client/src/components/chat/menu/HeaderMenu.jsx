@@ -61,7 +61,7 @@ const HeaderMenu = () => {
             <Menu
                 anchorEl={open}
                 keepMounted
-                open={open}
+                open={Boolean(open)}
                 onClose={handleClose}
                 getContentAnchorEl={null}
                 anchorOrigin={{
