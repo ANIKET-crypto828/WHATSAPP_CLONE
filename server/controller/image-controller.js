@@ -14,8 +14,9 @@ conn.once('open', () => {
 });
 
 export const uploadImage = (request, response) => {
-    if(!request.file) 
+    if(!request.file) {
         return response.status(404).json("File not found");
+    }
     
     const imageUrl = `${url}/file/${request.file.filename}`;
 

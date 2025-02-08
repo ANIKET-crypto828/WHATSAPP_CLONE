@@ -1,5 +1,3 @@
-
-
 export const downloadMedia = async (e, originalImage) => {
   e.preventDefault();
   try {
